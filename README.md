@@ -1,132 +1,126 @@
+# 2D → 3D 변환 및 Depth Estimation
 
-## 📖 프로젝트 개요
+## 📌 실습 목표
+본 실습의 목표는 2D 이미지로부터 Depth Map을 생성하며
 
-본 프로젝트는 Hugging Face의 Food101 데이터셋을 활용하여
-AI 학습을 위한 이미지 전처리 과정을 구현한 것이다.
+이를 기반으로 3D Point Cloud로 변환한다
 
-랜덤으로 선택된 이미지를 대상으로 다음 과정을 수행하였다:
+또한, Unit Test를 통해 정상 동작을 검증하고,
 
-크기 통일 (Resize)
-
-이상치 제거
-
-흑백 변환 (Grayscale)
-
-정규화 (Normalization)
-
-노이즈 제거 (Blur)
-
-전처리된 이미지 5장 저장
-
-## 📂 사용 데이터셋
-
-```Dataset: ethz/food101```
-
-```Split: train```
-
-Hugging Face datasets 라이브러리를 사용하여 로드
-
-```dataset = load_dataset("ethz/food101", split="train")```
-```dataset = dataset.shuffle(seed=random.randint(0, 10000))```
+기존 Depth Map 방식의 한계를 인식하여 DPT 기반 Depth을 추가로 실습했다.
 
 
-데이터는 완전 랜덤 셔플 후 순차적으로 검사하여
-전처리 조건을 만족하는 이미지 5장을 저장하였다.
 
-## ⚙ 전처리 과정
-# 1️⃣ 이미지 크기 조정 (Resize)
-```image = cv2.resize(image, (224, 224))```
+## 📂 프로젝트 구조
 
 
-모든 이미지를 224×224 크기로 통일
-
-딥러닝 모델 입력 크기 표준화
-
-연산 효율 향상
-
-# 2️⃣ 이상치 제거 (Outlier Filtering)
-✔ (1) 너무 어두운 이미지 제거
-```np.mean(gray) < threshold```
-
-
-이미지 평균 밝기 계산
-
-기준값(기본 50)보다 낮으면 제거
-
-학습에 부적절한 이미지 필터링
-
-✔ (2) 객체 크기가 너무 작은 이미지 제거
-```white_pixels / total_pixels < min_area_ratio```
+cometo_project01/
+├── depth_bf_af_images/ # 원본 이미지 및 결과 저장 폴더
+├── src/
+│ ├── depth_map.py # 기본 Depth Map 생성
+│ ├── pointcloud.py # Depth → 3D Point Cloud 변환
+│ └── depth_dpt.py # DPT 기반 Depth Estimation
+├── tests/
+│ └── test_depth_map.py # Unit Test 코드
+├── main.py # 기본 방식 실행 파일
+├── pytest.ini # pytest 설정 파일
+├── README.md
+└── .gitignore
 
 
-이진화 후 객체 비율 계산
-
-전체 픽셀 대비 객체 비율이 5% 미만이면 제거
-
-정보가 부족한 이미지 제거
-
-# 3️⃣ 흑백 변환 (Grayscale)
-```gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)```
 
 
-색상 정보를 제거하여 계산량 감소
+## ▶ 실행 방법
 
-형태 및 구조 중심 학습 가능
+### 1️⃣ 기본 Depth Map + 3D 변환 실행
+1. `depth_bf_af_images/` 폴더에 원본 이미지 저장  
+   (예: `street_1.jpeg`)
 
-# 4️⃣ 정규화 (Normalization)
-```normalized = gray / 255.0```
-
-
-픽셀 값을 0~255 → 0~1 범위로 변환
-
-학습 안정성 향상
-
-모델 수렴 속도 개선
-
-# 5️⃣ 노이즈 제거 (Gaussian Blur)
-```blurred = cv2.GaussianBlur(normalized, (5, 5), 0)```
+2. 실행
+`bash`
+`python main.py`
 
 
-작은 잡음 제거
+이미지 이름 입력
 
-불필요한 세부 요소 완화
-
-특징 추출 안정화
-
-# 6️⃣ 이미지 저장
-
-전처리를 통과한 이미지 중
-랜덤하게 5장을 저장하였다.
-
-```cv2.imwrite("preprocessed_samples/random_sample_X.jpg", processed)```
+`street_1.jpeg`
 
 
-저장 경로:
+결과 파일
 
-```preprocessed_samples/```
+`depth_street_1.png`
 
-## 🎯 전처리 목적
+`depth_color_street_1.png`
 
-데이터 품질 향상
+`pointcloud_street_1.xyz`
 
-불필요한 이상치 제거
+### 2️⃣ DPT 기반 Depth Estimation 실행
 
-모델 학습 안정성 확보
+기존 grayscale 기반 Depth Map은 깊이의 상대적 표현만 가능하여
+실제 거리감 파악이 어렵다고 판단하였다.
+이에 따라 Hugging Face에서 제공하는 사전학습된 DPT 모델을 활용하여
+Depth Estimation 결과를 비교 실습하였다.
 
-연산 효율 개선
+실행
 
-전처리는 AI 모델 성능에 직접적인 영향을 미치는
-핵심 단계이다.
-
-## 📦 실행 방법
-# 1️⃣ 필요 패키지 설치
-```pip install opencv-python numpy datasets```
-
-# 2️⃣ 실행
-```python image_preprocessing.py```
+`python src/depth_dpt.py`
 
 
-실행 후 ```preprocessed_samples``` 폴더에
-전처리된 이미지 5장이 저장된다.
+이미지 이름 입력
+
+`street_1.jpeg`
 
 
+결과 파일
+
+`dpt_depth_street_1.png`
+`dpt_depth_color_street_1.png`
+
+## 🧪 Unit Test 코드 및 실행 결과 문서화
+
+### ✔ Unit Test 목적
+
+Unit Test는 Depth Map 생성과 3D Point Cloud 변환 로직이
+의도한 대로 동작하는지를 자동으로 검증하기 위해 작성되었다.
+
+### ✔ 테스트 코드 위치
+`tests/test_depth_map.py`
+
+### ✔ 테스트 항목
+
+Depth Map 출력 크기 검증
+
+Depth 값의 범위(0~1) 검증
+
+Depth → Point Cloud 변환 결과 형태 검증
+
+잘못된 입력(None)에 대한 예외 처리 검증
+
+### ✔ Unit Test 실행 방법
+
+프로젝트 루트에서 다음 명령어를 실행한다.
+
+`pytest`
+
+### ✔ 실행 결과
+
+pytest 실행 결과, 총 4개의 테스트가 수집되었으며
+모든 테스트가 정상적으로 통과하였다.
+
+`collected 4 items`
+`tests/test_depth_map.py .... [100%]`
+```4 passed in 0.83s```
+
+
+이를 통해 Depth Map 및 3D 변환 로직이
+의도한 대로 정상 동작을 확인했다.
+
+## 📊 결과 및 고찰
+
+단순 grayscale 기반 Depth Map은 깊이의 상대적인 표현만 가능하여
+실제 거리 정보 해석에 한계가 있었다고 판단하였다.
+또한, Depth_Map_color를 실행했을 당시 색깔이 거리감을 직관적으로 판단하지 못했다.
+DPT 기반 Depth Estimation은 장면의 구조를 보다 직관적으로 표현하였다.
+
+두 방식의 결과를 비교함으로써
+전통적인 방식과 딥러닝 기반 접근 방식의 차이를 알 수 있었다.
