@@ -14,18 +14,19 @@
 ## 📂 프로젝트 구조
 
 
-cometo_project01/
-├── depth_bf_af_images/ # 원본 이미지 및 결과 저장 폴더
-├── src/
-│ ├── depth_map.py # 기본 Depth Map 생성
-│ ├── pointcloud.py # Depth → 3D Point Cloud 변환
-│ └── depth_dpt.py # DPT 기반 Depth Estimation
-├── tests/
-│ └── test_depth_map.py # Unit Test 코드
-├── main.py # 기본 방식 실행 파일
-├── pytest.ini # pytest 설정 파일
-├── README.md
-└── .gitignore
+```cometo_project01/```
+```├── depth_bf_af_images/        # 원본 이미지 및 결과 저장 폴더```
+```├── src/```
+```│   ├── depth_map.py         # 기본 Depth Map 생성```
+```│   ├── pointcloud.py        # Depth → 3D Point Cloud 변환```
+```│   └── depth_dpt.py          # DPT 기반 Depth Estimation```
+```├── tests/```
+```│   └── test_depth_map.py      # Unit Test 코드```
+```├── main.py                    # 기본 방식 실행 파일```
+```├── pytest.ini                 # pytest 설정 파일```
+```├── README.md```
+```└── .gitignore```
+
 
 
 
