@@ -1,0 +1,6 @@
+﻿train: C:/Users/uys03/Desktop/cometo_project01/datasets/train/images
+val: C:/Users/uys03/Desktop/cometo_project01/datasets/valid/images
+test: C:/Users/uys03/Desktop/cometo_project01/datasets/test/images
+
+nc: 53
+names: ['0', '1', '2', 'Bicycle', 'Bike', 'Car', 'Cyclist', 'Pedestrian', 'Pedestrians', 'Persona', 'Pessoa', 'Signboard', 'Stopper', 'aeroplane', 'bag', 'berdiri', 'bicycle', 'bird', 'boat', 'bottle', 'bus', 'car', 'cat', 'chair', 'cow', 'cyclist', 'dianzhuan', 'diningtable', 'dog', 'face', 'forklift', 'handbag', 'head', 'helmet', 'high', 'horse', 'jatuh', 'laptop', 'low', 'medium', 'motorbike', 'people', 'person', 'persons', 'pottedplant', 'refrigerator', 'sheep', 'sofa', 'teddy bear', 'train', 'tv', 'tvmonitor', 'vase']
