@@ -1,25 +1,13 @@
-# Python cache
-__pycache__/
-*.pyc
-*.pyo
-
-# Virtual environment
+# 환경
 venv/
-.venv/
-.env/
-
-# Test cache
+.vscode/
 .pytest_cache/
 
-# Execution results
-results/
+# 학습 산출물
+datasets/
+datasets_3cls/
+runs/
 
-# VSCode
-.vscode/
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# Jupyter Notebook
-.ipynb_checkpoints/
+# 백업파일
+*.bak
+week3/
