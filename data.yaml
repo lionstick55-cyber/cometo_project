@@ -1,6 +1,0 @@
-﻿train: C:/Users/uys03/Desktop/cometo_project01/datasets_3cls/train/images
-val: C:/Users/uys03/Desktop/cometo_project01/datasets_3cls/valid/images
-test: C:/Users/uys03/Desktop/cometo_project01/datasets_3cls/test/images
-
-nc: 3
-names: ['person', 'dog', 'car']
